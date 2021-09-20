@@ -22,6 +22,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: 1.54
+      - name: install app dependencies
+        run: yarn install && yarn run tauri info
       - name: download caddy (Windows only)
         if: matrix.platform == 'windows-latest'
         run: |
@@ -76,8 +78,8 @@ jobs:
           $LkPath = Get-Command lair-keystore | Select-Object -ExpandProperty Definition
           Copy-Item $HcPath -Destination src-tauri/bins/holochain-x86_64-pc-windows-msvc.exe
           Copy-Item $LkPath -Destination src-tauri/bins/lair-keystore-x86_64-pc-windows-msvc.exe
-      - name: install app dependencies and build it
-        run: yarn install && yarn run build
+      - name: build app
+        run: yarn run build
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
